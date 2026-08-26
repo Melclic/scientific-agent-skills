@@ -1,12 +1,17 @@
-# Nextflow Configuration, Executors & CLI
+cd# Nextflow Configuration, Executors & CLI
 
 How to configure, scale, cache, observe, and drive Nextflow runs. Source: https://www.nextflow.io/docs/latest/config.html and related pages.
 
 ## Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [nextflow.config and scopes](#nextflowconfig-and-scopes)
+  - [`nextflowVersion` manifest field](#nextflowversion-manifest-field)
+    - [Valid formats](#valid-formats)
+    - [Invalid formats](#invalid-formats)
+  - [Version string quirks](#version-string-quirks)
 - [Profiles](#profiles)
-- [Process selectors](#process-selectors-withname-withlabel)
+- [Process selectors (withName, withLabel)](#process-selectors-withname-withlabel)
 - [Executors](#executors)
 - [Cloud executors](#cloud-executors)
 - [Caching and -resume](#caching-and--resume)
@@ -56,6 +61,31 @@ manifest {
 Key scopes: `params`, `process`, `executor`, `docker`/`singularity`/`apptainer`/`podman`/`conda`/`wave`, `aws`/`google`/`azure`/`k8s`, `tower` (Seqera Platform), `report`/`timeline`/`trace`/`dag`, `manifest`, `env`, `cleanup`.
 
 Assignment uses `=`. Use the dotted form (`docker.enabled = true`) or block form (`docker { enabled = true }`) interchangeably.
+
+### `nextflowVersion` manifest field
+
+The `nextflowVersion` field in `nextflow.config` under `manifest {}` only supports **single** version constraints. Compound expressions like `>=X && <=Y` are **not valid**.
+
+#### Valid formats
+
+| Format | Meaning |
+|---|---|
+| `'>=23.04.0'` | Warn if Nextflow version is older |
+| `'!>=23.04.0'` | **Error** (abort) if Nextflow version is older |
+
+The `!` prefix turns the check from a warning into a hard error.
+
+#### Invalid formats
+
+```groovy
+// These do NOT work:
+nextflowVersion = '>=23.04.0 && <=25.10.5'   // no compound conditions
+nextflowVersion = '>=23.04.0..<=25.10.5'      // no range syntax
+```
+
+### Version string quirks
+
+Nextflow versions may include a build number (e.g. `25.10.4.11173`). The `nextflowVersion` check compares only the semantic version portion (`25.10.4`).
 
 ## Profiles
 
