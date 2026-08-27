@@ -304,3 +304,5 @@ nextflow self-update                # update the Nextflow engine
 | `NXF_OFFLINE=true` | Disable network calls (offline/air-gapped runs) |
 
 On HPC, always set a shared `NXF_SINGULARITY_CACHEDIR` so image pulls are reused across jobs. See `references/running-pipelines.md` for offline execution.
+
+Make sure that that `manifest.name` is defined in the `nextflow.config` if it does not make sure you warn the user. Running `nf-core pipelines lint` will fail if `manifest.name` was not defined. You can name it whatever string, but the best is a single "/" in the name, for example `manifest.name = "prefix/pipeline_name"`.
