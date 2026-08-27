@@ -305,4 +305,8 @@ nextflow self-update                # update the Nextflow engine
 
 On HPC, always set a shared `NXF_SINGULARITY_CACHEDIR` so image pulls are reused across jobs. See `references/running-pipelines.md` for offline execution.
 
-Make sure that that `manifest.name` is defined in the `nextflow.config` if it does not make sure you warn the user. Running `nf-core pipelines lint` will fail if `manifest.name` was not defined. You can name it whatever string, but the best is a single "/" in the name, for example `manifest.name = "prefix/pipeline_name"`.
+## lint
+
+This section describes linting.
+
+Note that `nextflow.config` must have a `manifest.name` entry (or `manifest { name = }`) and that the name must contain `/` to successfully run the nf-core linting `nf-core pipelines lint`
