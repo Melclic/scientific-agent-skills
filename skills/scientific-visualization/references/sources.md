@@ -67,6 +67,7 @@ All rules were accessed 2026-07-23. Pages without a displayed update date are la
 - **[IEEE-SIZE]** [IEEE Resolution and Size](https://journals.ieeeauthorcenter.ieee.org/create-your-ieee-journal-article/create-graphics-for-your-article/resolution-and-size/) — modified 2025-02-25; PS/EPS/PDF, >300/>600 dpi, 88.9/182 mm.
 - **[BMC-BIOINFO]** [BMC Bioinformatics: preparing your manuscript](https://bmcbioinformatics.biomedcentral.com/submission-guidelines/preparing-your-manuscript) — journal-specific formats, 85/170 mm, approximately 300 dpi, 10 MB, embedded fonts.
 - **[ACS-GRAPHICS]** [ACS Preparing Manuscript Graphics](https://pubs.acs.org/page/4authors/submission/graphics_prep.html) — general dimensions and typography; no page update date displayed.
+- **[TOXSCI-MPG]** [Toxicological Sciences: Manuscript Preparation Guidelines](https://academic.oup.com/toxsci/pages/Manuscript_Preparation_Guidelines) — Oxford Academic / Society of Toxicology; updated June 2025; figure format/resolution, panel labeling, western blot and IHC/IF figure requirements, alt text, supplementary file limits.
 
 ## Optional inspection backends
 

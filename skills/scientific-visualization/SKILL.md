@@ -63,8 +63,46 @@ Prefer position on a common scale. Before coding, check:
 - Make missing and out-of-range values explicit.
 - Provide alt text, a longer description for complex figures, and underlying data for web delivery.
 - Treat WCAG 2.2 as web guidance: 4.5:1 normal text, 3:1 large text, and 3:1 for graphical objects required for understanding; color cannot be the only cue. Applicability and exceptions matter.
+- **Binary confusion matrices:** color the diagonal (correct predictions) and
+  off-diagonal (errors) with two different sequential colormaps (e.g. Greens
+  for correct, Reds for errors) instead of one sequential hue across the whole
+  matrix. This makes correct-vs-incorrect legible at a glance while the exact
+  counts are still annotated on every cell, so the color is redundant rather
+  than the only cue. For multi-class (>2) confusion matrices this diagonal
+  green/off-diagonal red split usually stops being informative once several
+  classes can be confused with each other; prefer a single sequential
+  colormap there and reserve the two-tone scheme for the binary case.
 
 See `references/color_palettes.md`. A grayscale screen is useful but is not a complete color-vision or accessibility test.
+
+### Small multiples: choosing a subplot grid
+
+When laying out many similar panels (a `subplot_mosaic`, `plt.subplots(nrows,
+ncols)` grid, or a `FacetGrid`/`col_wrap`), pick the row/column count from the
+number of panels instead of hard-coding a fixed number of columns -- a fixed
+column count routinely leaves avoidable empty panels (e.g. 9 panels at 4
+columns wastes 3 empty cells; 3 columns fills exactly).
+
+```python
+import math
+
+def best_grid(n, max_cols=5):
+    """Choose (n_rows, n_cols) for n small-multiple panels with the fewest
+    empty cells, breaking ties in favor of more columns (a wider, shorter
+    grid)."""
+    best_score, best_dims = None, (n, 1)
+    for n_cols in range(1, max_cols + 1):
+        n_rows = math.ceil(n / n_cols)
+        empty = n_rows * n_cols - n
+        score = (empty, -n_cols)  # fewest empty cells, then most columns
+        if best_score is None or score < best_score:
+            best_score, best_dims = score, (n_rows, n_cols)
+    return best_dims
+```
+
+Cap `max_cols` to whatever stays legible at the panel's minimum readable
+width/height for the target medium (print column, slide, web), not an
+arbitrary default.
 
 ### 4. Implement with scoped styles
 
@@ -242,6 +280,21 @@ uv run --isolated --no-project --python 3.13 \
   --palette okabe_ito_on_white \
   --formats png,svg
 ```
+
+### Compute a proportional font-size hierarchy
+
+```bash
+uv run --isolated --no-project --python 3.13 \
+  python scripts/font_sizes.py 1280 720
+```
+
+Prints the plot-title/subplot-title/axis-title/legend/tick-label point sizes
+for a figure of the given width/height (pixels by default), scaled from an
+18 pt axis-title reference so the hierarchy's ratios hold at any output size
+(see `references/publication_guidelines.md`'s "Font-size hierarchy" section).
+Import `compute_font_sizes()` and call it for every figure, including each
+subplot of a multi-panel figure (pass that panel's own rendered width/height,
+not the whole figure's).
 
 ### Inspect/write styles and smoke-test export
 

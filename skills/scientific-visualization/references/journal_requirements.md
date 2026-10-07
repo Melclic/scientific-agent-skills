@@ -147,6 +147,25 @@ BMC journals are migrating onto Springer Nature Link and may publish updated jou
 
 Use the selected ACS journal’s current Author Guidelines for formats, color, resolution, and TOC/abstract graphics. The planner intentionally does not invent missing ACS-wide requirements.
 
+## Toxicological Sciences (Oxford Academic / Society of Toxicology)
+
+**Scope:** `Toxicological Sciences` Manuscript Preparation Guidelines, updated June 2025 [TOXSCI-MPG].
+
+- Figures must be high resolution `.eps` or `.tif`, minimum 300 dpi. Figures created in PowerPoint are not acceptable.
+- Number figures consecutively; a legend must be included for every figure.
+- Use Arial or Helvetica for figure text/lettering.
+- Consider figure-size constraints: published figures appear much smaller than the size typically submitted.
+- Multi-panel figures need letters, symbols, and numbers that are consistent between panels and across all figures; all panels of one figure must be placed into a single figure file that fits on one printed page.
+- Clear designation of statistically significant differences (or lack thereof) is required where appropriate.
+- **Western blots:** at least one molecular-weight marker (preferably two) clearly marked, positive/negative controls included, quantification of signals, and a minimum of 4 bandwidths above and below the protein(s) of interest in each figure.
+- **Immunohistochemistry/immunofluorescence:** positive and negative controls are required.
+- Animal photographs and photo-realistic drawings are strongly discouraged; acceptability of all figures is at the Editor's discretion.
+- Tables and figures submitted in color are published online in color at no charge; there are no page or submission fees.
+- Alt text (alternative text) descriptions are required for every image, figure, illustration, and photograph in the main article; include each description directly under its figure legend, preceded by "Alt text:".
+- Supplementary Material figure/data files should be condensed to as few files as possible, each no more than 2 MB; legends for supplementary figures go in the supplemental file, not the main manuscript.
+
+If a manuscript is recommended for publication after peer review, authors must then supply files meeting all of the above (including high-resolution figures); accepted manuscripts that do not comply are returned for correction before production.
+
 ## Rules that are not universal
 
 Do not present these as cross-publisher laws:

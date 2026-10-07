@@ -138,12 +138,58 @@ Passing a palette ratio audit does not prove WCAG conformance; applicability dep
 ## Layout, typography, and annotation
 
 - Design at final physical size. Judge labels, symbols, and line weights at that size.
-- Use one legible font family and a restrained size hierarchy.
+- Use one legible font family and a restrained size hierarchy (see below).
 - Include units in axis/colorbar labels. Define abbreviations.
 - Keep panel labels consistent and outside dense data regions.
 - Use layout engines intentionally: `layout="constrained"` handles nested grids and colorbars; calling `tight_layout()` disables constrained layout [MPL-LAYOUT].
 - Check all labels and legends after export. `bbox_inches="tight"` can alter physical page dimensions, so do not use it when exact page width is required [MPL-SAVE].
 - Keep decorative ink subordinate to data, uncertainty, and annotations. Gridlines can help value lookup when light and sparse; removing them is not a universal rule.
+
+### Font-size hierarchy
+
+Anchor the hierarchy to the **axis title**, not the plot title: it is present on nearly every figure and is the steadiest reference point.
+
+| Element | Relative to axis title | Typical absolute size |
+|---|---:|---:|
+| Plot/panel title | 120-140% | 14-16 pt |
+| Axis titles (baseline) | 100% | 11-12 pt |
+| Legend text | 80-90% | 9-10 pt |
+| Tick labels | 80-90% | 9-10 pt |
+
+A reliable default triplet is `title : axis title : legend/tick = 14 pt : 11 pt : 9 pt`. Keep adjacent levels roughly **2-3 pt apart**: collapsing title and axis-title to the same size, or closer than ~2 pt, flattens the hierarchy and makes it illegible once the figure is reduced to its final printed size.
+
+These are design-time ratios, not a substitute for a target journal's final-reduced-size minimums (`journal_requirements.md`) — check both. Judge sizes at the figure's final printed/rendered dimensions, not at the on-screen editing size, and avoid text smaller than roughly **8 pt** after scaling.
+
+`scripts/font_sizes.py` implements this hierarchy as `compute_font_sizes(width, height)`, so the ratios and the 8 pt floor are computed instead of hand-tuned per figure. Call it for every panel of a multi-panel figure too, passing that panel's own rendered width/height (the figure size divided by its grid geometry), not the whole figure's.
+
+### Keep font size proportional to output size
+
+The same absolute point size reads as a different *relative* size depending on how large the figure is rendered: a 10 pt title on a 50x50 cm poster panel looks tiny next to the same 10 pt title on a 5x5 cm thumbnail. When the same figure role (e.g. "panel title") is exported at different physical output dimensions across a project, scale every level of the hierarchy with the output dimension so the font-size-to-figure-size ratio — and the 2-3 pt gaps between levels — stays constant. For example, doubling a figure's physical width/height should double its point sizes at every tier (10 pt -> 20 pt title), not leave them fixed. Parameterize sizes from one reference figure size (e.g. a scale factor relative to a baseline width in inches) rather than hardcoding the same pt values across figures of differing output sizes, and scale all tiers together so the hierarchy itself does not distort.
+
+Use `scripts/font_sizes.py` instead of hand-tuning sizes per figure:
+
+```python
+from font_sizes import compute_font_sizes
+
+# Standalone figure: compute from its own rendered pixel size.
+fig, ax = plt.subplots(figsize=(7, 5.8))
+fig_w, fig_h = fig.get_size_inches()
+sizes = compute_font_sizes(fig_w * 96, fig_h * 96)
+ax.set_xlabel("Time (hours)", fontsize=sizes["axis_title"])
+ax.tick_params(labelsize=sizes["tick_labels"])
+ax.legend(fontsize=sizes["legend"])
+
+# Multi-panel figure: call compute_font_sizes() per panel, passing that
+# panel's own rendered size (the figure size divided by its grid geometry),
+# so panels in a 2x3 grid get smaller fonts than the same figure drawn as a
+# single panel.
+n_rows, n_cols = 2, 3
+fig, axes = plt.subplots(n_rows, n_cols, figsize=(12, 7))
+fig_w, fig_h = fig.get_size_inches()
+panel_sizes = compute_font_sizes((fig_w / n_cols) * 96, (fig_h / n_rows) * 96)
+for ax in axes.flat:
+    ax.set_title("Panel title", fontsize=panel_sizes["subplot_title"])
+```
 
 ## Static, vector, raster, and interactive output
 
